@@ -8,6 +8,7 @@ Jinja2
 jinja2-time
 kiwisolver
 make
+evorobotpy2
 MarkupSafe
 matplotlib
 numpy

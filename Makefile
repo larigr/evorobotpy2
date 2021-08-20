@@ -1,4 +1,4 @@
-LIB_DIR := lib
+LIB_DIR := evorobotpy2/library
 
 remove_files = \
 	cd $(LIB_DIR); \
