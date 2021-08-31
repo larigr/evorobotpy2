@@ -14,6 +14,12 @@ Then install the requirements:
 ```bash
 pip install -r requirements.txt
 ```
+
+To make things easier you can create an alias to run the simulator:
+```
+make create_alias
+```
+
 And now we are good to go!
 
 ## Compiling
@@ -38,11 +44,11 @@ make compile_all
 
 To run a model, first go to the target environment, and then run the following command:
 ```bash
-python ../bin/es.py -f {target envirnoment}.ini
+evrun -f {target envirnoment}.ini
 ```
 To see all execution options run:
 ```bash
-python ../bin/es.py --help
+evrun --help
 ```
 
 ## Contributing
