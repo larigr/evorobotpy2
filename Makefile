@@ -1,4 +1,4 @@
-LIB_DIR := lib
+LIB_DIR := library
 
 remove_files = \
 	cd $(LIB_DIR); \
