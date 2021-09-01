@@ -1,13 +1,4 @@
-#!/usr/bin/python
-# -*- coding: utf-8 -*-
-
-"""
-   This file belong to https://github.com/snolfi/evorobotpy
-   and has been written by Stefano Nolfi and Paolo Pagliuca, stefano.nolfi@istc.cnr.it, paolo.pagliuca@istc.cnr.it
-
-   utils.py include sorting functions
-
-"""
+import os 
 import numpy as np
 
 # Sorting functions
@@ -62,3 +53,11 @@ def ascendent_sort(vect):
         tmpv[mini] = 999999999999.0
     return vect, index
 
+def get_root_dir():
+    exe_path = str(os.getcwd())
+    split_str = exe_path.split('evorobotpy2')
+    return split_str[0] + 'evorobotpy2'
+
+def create_dir(directory):
+    if not os.path.isdir(directory):
+        os.mkdir(directory)

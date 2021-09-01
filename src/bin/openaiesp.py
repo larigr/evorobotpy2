@@ -19,6 +19,7 @@ from utils import ascendent_sort
 import sys
 import os
 import configparser
+from data_interface import DataInterface
 
 # Parallel implementation of Open-AI-ES algorithm developed by Salimans et al. (2017)
 # the workers evaluate a fraction of the population in parallel
@@ -27,11 +28,13 @@ import configparser
 class Algo(EvoAlgo):
     def __init__(self, env, policy, seed, fileini, filedir):
         EvoAlgo.__init__(self, env, policy, seed, fileini, filedir)
+        self.data_interface = DataInterface(
+            model='algo',
+            features = ['gen', 'msteps', 'bestfit', 'bestgfit', 'bestsam', 'avg', 'weightsize']
+        )
 
     def loadhyperparameters(self):
-
         if os.path.isfile(self.fileini):
-
             config = configparser.ConfigParser()
             config.read(self.fileini)
             self.maxsteps = 1000000
@@ -239,7 +242,6 @@ class Algo(EvoAlgo):
             self.policy.nn.setNormalizationVectors()
 
     def run(self):
-
         start_time = time.time()
         last_save_time = start_time
         elapsed = 0
@@ -248,8 +250,6 @@ class Algo(EvoAlgo):
             print("Salimans: seed %d maxmsteps %d batchSize %d stepsize %lf noiseStdDev %lf wdecay %d symseed %d nparams %d" % (self.seed, self.maxsteps / 1000000, self.batchSize, self.stepsize, self.noiseStdDev, self.wdecay, self.symseed, self.nparams))
 
         while (self.steps < self.maxsteps):
-
-            
             fitness_worker, weval = self.evaluate()   # evaluate sample (each worker evaluate a fraction of the population) 
             self.comm.Allgatherv(fitness_worker, [self.fitness, MPI.DOUBLE])                # brodcast fitness value to all workers
             self.comm.Allgatherv(weval, [self.evals, MPI.INT])                              # broadcast number of steps performed to all workers
@@ -270,11 +270,13 @@ class Algo(EvoAlgo):
                 self.update_normvector()              # the workers overwrite their normalization vector with the vector received from the master
 
             if self.rank == 0:
-                print('Seed %d (%.1f%%) gen %d msteps %d bestfit %.2f bestgfit %.2f bestsam %.2f avg %.2f weightsize %.2f' %
-                      (self.seed, self.steps / float(self.maxsteps) * 100, self.cgen, self.steps / 1000000, self.bestfit, self.bestgfit, self.bfit, self.avgfit, self.avecenter))
+                perc = self.steps / float(self.maxsteps) * 100
+                data = [self.cgen, self.steps / 1000000, self.bestfit, self.bestgfit, self.bfit, self.avgfit, self.avecenter]
+                self.data_interface.save_gen(data)
+                self.data_interface.print_gen(perc)
 
         if self.rank == 0:
-            self.savedata()                           # save data at the end of evolution
+            self.data_interface.save()                        # save data at the end of evolution
 
         # print simulation time
         end_time = time.time()
