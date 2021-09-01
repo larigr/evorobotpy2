@@ -3,7 +3,7 @@
 
 Firstly, if you are using Linux, install the following library:
 ```bash
-sudo apt-get install libgsl-dev
+sudo apt-get install libgsl-dev libopenmpi-dev
 ```
 After that, make shure to create a virtual environment in the root directory:
 ```bash
