@@ -106,9 +106,11 @@ class Algo(EvoAlgo):
     def savedata(self):
         self.save()             # save the best agent so far, the best postevaluated agent so far, and progress data across generations
         fname = self.filedir + "/S" + str(self.seed) + ".fit"
-        fp = open(fname, "w")   # save summary
+        fp = open(fname, "a")   # save summary
         fp.write('Seed %d (%.1f%%) gen %d msteps %d bestfit %.2f bestgfit %.2f bestsam %.2f avgfit %.2f paramsize %.2f \n' %
              (self.seed, self.steps / float(self.maxsteps) * 100, self.cgen, self.steps / 1000000, self.bestfit, self.bestgfit, self.bfit, self.avgfit, self.avecenter))
+        fp.write('//')
+        fp.write(str(self.cgen))    
         fp.close()
  
     def evaluate(self):
