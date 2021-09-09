@@ -32,23 +32,24 @@ if len(sys.argv) == 1:
                         averagen += 1
                         data.append(float(el))
                         found = False
-                    if (el == 'bestgfit'):
+                    if el == "bestgfit":
                         found = True
 print("")
-if (averagen > 0):
-    print("Average Generalization: %.2f +-%.2f (%d S*.fit files)" % (np.average(data), np.std(data), averagen))
+if averagen > 0:
+    print(
+        "Average Generalization: %.2f +-%.2f (%d S*.fit files)"
+        % (np.average(data), np.std(data), averagen)
+    )
     named = os.getcwd()
     named = named.split("/")
-    fname = named[len(named)-1] + ".st"   
+    fname = named[len(named) - 1] + ".st"
     fp = open(fname, "w")
     for d in data:
         fp.write("%f\n" % d)
     fp.close()
-    
+
 else:
     print("No data found")
     print("Compute the average and stdev of generalization performance")
     print("Extract data from S*.fit files: data should follow the bestgfit key")
     print("Save extracted data in a current-directory.st file")
-
-

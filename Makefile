@@ -19,6 +19,9 @@ compile_resource = \
 	python setup${1}.py build_ext --inplace; \
 	cp ${2}*.so ../bin
 
+lint:
+	black .
+
 update_requirements:
 	pip freeze | sed "s/==.*//g" > requirements.txt
 

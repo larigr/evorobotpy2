@@ -10,8 +10,8 @@ import stat
 comm = MPI.COMM_WORLD
 rank = comm.Get_rank()
 
-class FORK():
 
+class FORK:
     def __init__(self):
         a = 2 + 1
 
@@ -21,21 +21,18 @@ class FORK():
         (from https://github.com/garymcintire/mpi_util/)
         """
         global comm, rank
-        if n<=1:
-          return "child", comm, rank
+        if n <= 1:
+            return "child", comm, rank
         if os.getenv("IN_MPI") is None:
-           env = os.environ.copy()
-           env.update(
-              MKL_NUM_THREADS="1",
-              OMP_NUM_THREADS="1",
-              IN_MPI="1" 
-           )
-           print( ["mpirun", "-np  ", str(n), sys.executable] + sys.argv)
-           subprocess.check_call(["mpirun", "-np", str(n), sys.executable] +['-u']+ sys.argv, env=env)
-           return "parent", comm, rank
+            env = os.environ.copy()
+            env.update(MKL_NUM_THREADS="1", OMP_NUM_THREADS="1", IN_MPI="1")
+            print(["mpirun", "-np  ", str(n), sys.executable] + sys.argv)
+            subprocess.check_call(
+                ["mpirun", "-np", str(n), sys.executable] + ["-u"] + sys.argv, env=env
+            )
+            return "parent", comm, rank
         else:
-           #global nworkers, rank
-           nworkers = comm.Get_size()
-           rank = comm.Get_rank()
-           return "child", comm, rank
-
+            # global nworkers, rank
+            nworkers = comm.Get_size()
+            rank = comm.Get_rank()
+            return "child", comm, rank

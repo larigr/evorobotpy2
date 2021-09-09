@@ -37,6 +37,7 @@ def descendent_sort(vect):
         tmpv[maxi] = -999999999999.0
     return vect, index
 
+
 # Ascendent sorting
 def ascendent_sort(vect):
     # Copy of the vector
@@ -61,4 +62,3 @@ def ascendent_sort(vect):
         # Set invalid value
         tmpv[mini] = 999999999999.0
     return vect, index
-
