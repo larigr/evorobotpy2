@@ -12,7 +12,7 @@ class combinador():
         if n == len(lista_params):
             return
         else:
-            for x in dicionario[lista[n]]:
+            for x in dicionario[lista_params[n]]:
                 self.lista.append(x)
                 if n == len(lista_params)-1:
                     self.combinados.append(self.lista.copy())
