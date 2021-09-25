@@ -75,7 +75,7 @@ class Ini_Generator():
 
         with open(path, 'w') as inifile:
             inifile.write('[EXP]\n')
-            inifile.write(exp+str('\n'))
+            inifile.write('environment ='+exp+str('\n'))
             for key, args in self.ini_dic.items():
                 inifile.write(key+"\n")
                 for skey, sargs in args.items():
