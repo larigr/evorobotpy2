@@ -6,7 +6,7 @@ dicionario = {'enviroment': ['HopperBulletEnv-v0'],
               'maxmsteps': [27, 32, 23]}
 
 
-def generate_all_inis(base):
+def generate_all_inis(base,foldername='experiment'):
     d = Combiner()
 
     dic_keys = list(base.keys())
@@ -15,8 +15,8 @@ def generate_all_inis(base):
     print(d.all_combinations)
     d.array_to_dict(dic_keys)
 
-    gerador = Ini_Generator(d.all_combinations, 'experiment')
+    gerador = Ini_Generator(d.all_combinations, foldername)
     gerador.create_all_exp()
 
 
-generate_all_inis(dicionario)
+generate_all_inis(dicionario,foldername)
