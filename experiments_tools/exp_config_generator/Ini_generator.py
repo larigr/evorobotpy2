@@ -48,8 +48,7 @@ class Ini_Generator():
         data = self.__env_data['BaseEnv']
         for env, values in data.items():
             for key in dic:
-                if key in values:
-                    values[key] = dic[key]
+                values[key] = dic[key]
         self.ini_dic = data
         return data
 
