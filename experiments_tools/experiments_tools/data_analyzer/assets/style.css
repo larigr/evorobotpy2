@@ -1,0 +1,36 @@
+body { 
+    margin: 0;
+    background-image: linear-gradient(to right, #cbe896 , #7b9ea8) !important;
+}
+
+.ini_div{
+    margin: auto;
+    border-radius: 35px;
+    background-color:#fafffd;
+    width: 50%;
+    padding: 5%;
+    text-align:center;
+    margin-top:150px;
+  
+}
+
+.analyze_serie{
+    margin:auto;
+    border-radius: 35px;
+    background-color:#fafffd;
+    width: 85%;
+    padding: 5%;
+    margin-top: 50px;
+    margin-bottom: 50px;
+    
+    
+}
+
+.table_param{
+    margin: auto;
+    padding: 5%;
+    margin-top: 50px;
+    margin-bottom: 50px;
+    width: 70%;
+
+}
