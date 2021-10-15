@@ -41,7 +41,7 @@ for i in e_list:
             if '.ini' in f:
                 if not '.txt' in f:
                     ini_name = f
-        seed_command = 'python3 ../../../../bin/es.py -f {}'.format(ini_name)
+        seed_command = 'python3 ../../../../../bin/es.py -f {}'.format(ini_name)
         seed_command = seed_command + (' -s {} {}'.format(seed, additional_params))
         new_command = [find_folder,seed_command]
         print(new_command)
