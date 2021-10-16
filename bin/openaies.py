@@ -126,15 +126,15 @@ class Algo(EvoAlgo):
         self.cgen += 1
         
         percentage = int(self.steps / float(self.maxsteps) * 100)
-    
-        if percentage%self.policy.frequency ==0:
-            
-            if percentage!=self.old:
-                self.old =   percentage 
-                if self.policy.random_change:
-                    self.policy.maxsteps = np.random.randint(1,11)*self.policy.maxsteps_change 
-                    print('maxsteps:',self.policy.maxsteps)
-                else:   
+
+        if self.policy.random_change:
+            self.policy.maxsteps = np.random.randint(1,11)*self.policy.maxsteps_change 
+            print('maxsteps:',self.policy.maxsteps)
+
+        else:
+            if percentage%self.policy.frequency ==0:
+                if percentage!=self.old:
+                    self.old =   percentage 
                     self.policy.maxsteps += self.policy.maxsteps_change 
                     print('maxsteps:',self.policy.maxsteps)
             
