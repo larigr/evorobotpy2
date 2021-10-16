@@ -47,6 +47,9 @@ class Policy(object):
         self.wrange = 1.0    # weight range, used in uniform initialization only
         self.low = -1.0      # mimimum activation
         self.high = 1.0      # maximum activation
+        self.frequency =1000 # frequency of change in maxteps
+        self.maxsteps_change= 0 # quantity of change in maxsteps
+        self.random_change = False  # if the change is random or not
         
         # Read configuration file
         self.readConfig()
@@ -171,6 +174,18 @@ class Policy(object):
           if (o == "wrange"):
               self.wrange = config.getint("POLICY","wrange")
               found = 1  
+          if (o == "frequency"):
+              self.frequency = config.getint("POLICY","frequency")
+              found = 1      
+              print('-------------------------------------------------')
+          if (o == "maxsteps_change"):
+              self.maxsteps_change = config.getint("POLICY","maxsteps_change")
+              found = 1      
+              print('-------------------------------------------------')
+          if (o == "random_change"):
+              self.random_change = config.getboolean("POLICY","random_change")
+              found = 1      
+              print('-------------------------------------------------')
           if (found == 0):
               print("\033[1mOption %s in section [POLICY] of %s file is unknown\033[0m" % (o, self.fileini))
               sys.exit()

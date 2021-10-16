@@ -102,20 +102,92 @@ class Algo(EvoAlgo):
         self.tnormepisodes = 0.0                 # total epsidoes in which normalization data should be collected so far
         self.normepisodes = 0                    # numer of episodes in which normalization data has been actually collected so far
         self.normalizationdatacollected = False  # whether we collected data for updating the normalization vector
+        self.old = 0
+
 
     def savedata(self):
         self.save()             # save the best agent so far, the best postevaluated agent so far, and progress data across generations
         fname = self.filedir + "/S" + str(self.seed) + ".csv"
         fp = open(fname, "a")   # save summary
-        if self.firstcreated == True:
-            fp.write(',msteps,bestfit,bestgfit,bestsam,avgfit,paramsize \n')
-            self.firstcreated = False
+        #if self.firstcreated == True:
+        #    fp.write(',msteps,bestfit,bestgfit,bestsam,avgfit,paramsize \n')
+        #    self.firstcreated = False
         fp.write('%d,%d,%.2f,%.2f,%.2f,%.2f,%.2f \n' %
             (self.cgen, self.steps / 1000000, self.bestfit, self.bestgfit, self.bfit, self.avgfit, self.avecenter))
     
         fp.close()
- 
+
     def evaluate(self):
+        cseed = self.seed + self.cgen * self.batchSize  # Set the seed for current generation (master and workers have the same seed)
+        self.rs = np.random.RandomState(cseed)
+        self.samples = self.rs.randn(self.batchSize, self.nparams)
+
+
+        self.cgen += 1
+        
+        percentage = int(self.steps / float(self.maxsteps) * 100)
+    
+        if percentage%self.policy.frequency ==0:
+            
+            if percentage!=self.old:
+                self.old =   percentage 
+                if self.policy.random_change:
+                    self.policy.maxsteps = np.random.randint(1,11)*self.policy.maxsteps_change 
+                    print('maxsteps:',self.policy.maxsteps)
+                else:   
+                    self.policy.maxsteps += self.policy.maxsteps_change 
+                    print('maxsteps:',self.policy.maxsteps)
+            
+        # evaluate samples
+        candidate = np.arange(self.nparams, dtype=np.float64)
+        for b in range(self.batchSize):               
+            for bb in range(2):
+                if (bb == 0):
+                    candidate = self.center + self.samples[b,:] * self.noiseStdDev
+                else:
+                    candidate = self.center - self.samples[b,:] * self.noiseStdDev
+                self.policy.set_trainable_flat(candidate)
+                self.policy.nn.normphase(0) # normalization data is collected during the post-evaluation of the best sample of he previous generation
+                eval_rews, eval_length = self.policy.rollout(self.policy.ntrials, seed=(self.seed + (self.cgen * self.batchSize) + b))
+                self.samplefitness[b*2+bb] = eval_rews
+                self.steps += eval_length
+
+        fitness, self.index = ascendent_sort(self.samplefitness)       # sort the fitness
+        self.avgfit = np.average(fitness)                         # compute the average fitness                   
+
+        self.bfit = fitness[(self.batchSize * 2) - 1]
+        bidx = self.index[(self.batchSize * 2) - 1]  
+        if ((bidx % 2) == 0):                                     # regenerate the genotype of the best samples
+            bestid = int(bidx / 2)
+            self.bestsol = self.center + self.samples[bestid] * self.noiseStdDev  
+        else:
+            bestid = int(bidx / 2)
+            self.bestsol = self.center - self.samples[bestid] * self.noiseStdDev
+
+        self.updateBest(self.bfit, self.bestsol)                  # Stored if it is the best obtained so far 
+                
+        # postevaluate best sample of the last generation
+        # in openaiesp.py this is done the next generation, move this section before the section "evaluate samples" to produce identical results
+        gfit = 0
+        if self.bestsol is not None:
+            self.policy.set_trainable_flat(self.bestsol)
+            self.tnormepisodes += self.inormepisodes
+            for t in range(self.policy.nttrials):
+                if self.policy.normalize == 1 and self.normepisodes < self.tnormepisodes:
+                    self.policy.nn.normphase(1)
+                    self.normepisodes += 1  # we collect normalization data
+                    self.normalizationdatacollected = True
+                else:
+                    self.policy.nn.normphase(0)
+                eval_rews, eval_length = self.policy.rollout(1, seed=(self.seed + 100000 + t))
+                gfit += eval_rews               
+                self.steps += eval_length
+            gfit /= self.policy.nttrials    
+            self.updateBestg(gfit, self.bestsol)
+
+    
+ 
+    def evaluateOLD(self):
         cseed = self.seed + self.cgen * self.batchSize  # Set the seed for current generation (master and workers have the same seed)
         self.rs = np.random.RandomState(cseed)
         self.samples = self.rs.randn(self.batchSize, self.nparams)
