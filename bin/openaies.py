@@ -103,6 +103,8 @@ class Algo(EvoAlgo):
         self.normepisodes = 0                    # numer of episodes in which normalization data has been actually collected so far
         self.normalizationdatacollected = False  # whether we collected data for updating the normalization vector
         self.old = 0
+        self.change_count = 0
+        self.bestfit_n_gen = []
 
 
     def savedata(self):
@@ -127,16 +129,16 @@ class Algo(EvoAlgo):
         
         percentage = int(self.steps / float(self.maxsteps) * 100)
 
+        
         if self.policy.random_change:
             self.policy.maxsteps = np.random.randint(1,11)*self.policy.maxsteps_change 
-            print('maxsteps:',self.policy.maxsteps)
-
-        else:
-            if percentage%self.policy.frequency ==0:
-                if percentage!=self.old:
-                    self.old =   percentage 
-                    self.policy.maxsteps += self.policy.maxsteps_change 
-                    print('maxsteps:',self.policy.maxsteps)
+            print('maxsteps random:',self.policy.maxsteps)
+                
+        elif percentage%self.policy.frequency == 0:
+            if percentage!=self.old:
+                self.old =   percentage 
+                self.policy.maxsteps += self.policy.maxsteps_change 
+                print('maxsteps frequency:',self.policy.maxsteps)
             
         # evaluate samples
         candidate = np.arange(self.nparams, dtype=np.float64)
@@ -156,6 +158,9 @@ class Algo(EvoAlgo):
         self.avgfit = np.average(fitness)                         # compute the average fitness                   
 
         self.bfit = fitness[(self.batchSize * 2) - 1]
+        if self.modified and self.adaptive:
+            self.bestfit_n_gen[change_count] = self.bfit
+            change_count += 1
         bidx = self.index[(self.batchSize * 2) - 1]  
         if ((bidx % 2) == 0):                                     # regenerate the genotype of the best samples
             bestid = int(bidx / 2)
