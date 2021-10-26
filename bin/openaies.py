@@ -12,6 +12,7 @@
 import numpy as np
 from numpy import zeros, ones, dot, sqrt
 import math
+from states import States
 import time
 from evoalgo import EvoAlgo
 from utils import ascendent_sort
@@ -111,34 +112,34 @@ class Algo(EvoAlgo):
         self.save()             # save the best agent so far, the best postevaluated agent so far, and progress data across generations
         fname = self.filedir + "/S" + str(self.seed) + ".csv"
         fp = open(fname, "a")   # save summary
-        #if self.firstcreated == True:
-        #    fp.write(',msteps,bestfit,bestgfit,bestsam,avgfit,paramsize \n')
-        #    self.firstcreated = False
-        fp.write('%d,%d,%.2f,%.2f,%.2f,%.2f,%.2f \n' %
-            (self.cgen, self.steps / 1000000, self.bestfit, self.bestgfit, self.bfit, self.avgfit, self.avecenter))
+
+        fp.write('%d,%d,%.2f,%.2f,%.2f,%.2f,%.2f,%d\n' %
+            (self.cgen, self.steps / 1000000, self.bestfit, self.bestgfit, self.bfit, self.avgfit, self.avecenter,self.policy.maxsteps))
     
         fp.close()
 
     def evaluate(self):
+     
         cseed = self.seed + self.cgen * self.batchSize  # Set the seed for current generation (master and workers have the same seed)
         self.rs = np.random.RandomState(cseed)
         self.samples = self.rs.randn(self.batchSize, self.nparams)
 
-
-        self.cgen += 1
-        
+        self.cgen += 1        
         percentage = int(self.steps / float(self.maxsteps) * 100)
 
-        
+        self.change_state(percentage)
         if self.policy.random_change:
-            self.policy.maxsteps = np.random.randint(1,11)*self.policy.maxsteps_change 
-            print('maxsteps random:',self.policy.maxsteps)
-                
-        elif percentage%self.policy.frequency == 0:
-            if percentage!=self.old:
-                self.old =   percentage 
-                self.policy.maxsteps += self.policy.maxsteps_change 
-                print('maxsteps frequency:',self.policy.maxsteps)
+            self.policy.maxsteps = np.random.randint(1,21)*self.policy.maxsteps_change 
+            print('maxsteps:',self.policy.maxsteps)
+
+        else:
+
+            if percentage%self.policy.frequency ==0: 
+                if percentage!=self.old:
+                    self.policy.maxsteps += self.policy.maxsteps_change 
+                    print('maxsteps:',self.policy.maxsteps)
+        self.old =   percentage 
+
             
         # evaluate samples
         candidate = np.arange(self.nparams, dtype=np.float64)
@@ -189,6 +190,18 @@ class Algo(EvoAlgo):
                 self.steps += eval_length
             gfit /= self.policy.nttrials    
             self.updateBestg(gfit, self.bestsol)
+
+    def change_state(self,percentage):
+        
+        pol = self.policy
+
+        if percentage!=self.old:
+            if percentage%pol.states_trigger[pol.state_counter]==0:
+                print('State Changed to:',pol.states_list[pol.state_counter])
+                pol.env.env.state_is = pol.states_list[pol.state_counter]
+                if pol.state_counter != len(pol.states_trigger)-1:
+                    pol.state_counter += 1
+            
 
     
  
@@ -286,7 +299,11 @@ class Algo(EvoAlgo):
         self.center += dCenter                                    # move the center in the direction of the momentum vectors
         self.avecenter = np.average(np.absolute(self.center))      
 
-
+    def state_change(self):
+        if self.state == States.Alive_bonus_0:
+            pass
+        elif self.state == States.Norm:
+            pass
     def run(self):
 
         self.setProcess()                           # initialize class variables
