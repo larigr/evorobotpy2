@@ -50,7 +50,7 @@ class Policy(object):
         self.frequency =1000 # frequency of change in maxteps
         self.maxsteps_change= 0 # quantity of change in maxsteps
         self.random_change = False  # if the change is random or not
-        
+        self.states_change = 100,"nothing"
         # Read configuration file
         self.readConfig()
         # Display info
@@ -177,15 +177,29 @@ class Policy(object):
           if (o == "frequency"):
               self.frequency = config.getint("POLICY","frequency")
               found = 1      
-              print('-------------------------------------------------')
+              
           if (o == "maxsteps_change"):
               self.maxsteps_change = config.getint("POLICY","maxsteps_change")
               found = 1      
-              print('-------------------------------------------------')
+            
           if (o == "random_change"):
               self.random_change = config.getboolean("POLICY","random_change")
-              found = 1      
-              print('-------------------------------------------------')
+              found = 1     
+
+          if (o== "states_change"):
+              array_info = config.get("POLICY","states_change").split(',')
+              self.states_trigger = []
+              self.states_list = []
+              for x in range(0,len(array_info)):
+                  if x%2 == 0:
+                    self.states_trigger.append(int(array_info[x]))
+                  else:
+                    self.states_list.append(array_info[x])
+
+
+
+              found = 1
+           
           if (found == 0):
               print("\033[1mOption %s in section [POLICY] of %s file is unknown\033[0m" % (o, self.fileini))
               sys.exit()

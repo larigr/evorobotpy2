@@ -12,7 +12,6 @@
 import numpy as np
 from numpy import zeros, ones, dot, sqrt
 import math
-from states import States
 import time
 from evoalgo import EvoAlgo
 from utils import ascendent_sort
@@ -104,6 +103,7 @@ class Algo(EvoAlgo):
         self.normepisodes = 0                    # numer of episodes in which normalization data has been actually collected so far
         self.normalizationdatacollected = False  # whether we collected data for updating the normalization vector
         self.old = 0
+        self.state_counter = 0
 
 
     def savedata(self):
@@ -191,11 +191,11 @@ class Algo(EvoAlgo):
         pol = self.policy
 
         if percentage!=self.old:
-            if percentage%pol.states_trigger[pol.state_counter]==0:
-                print('State Changed to:',pol.states_list[pol.state_counter])
-                pol.env.env.state_is = pol.states_list[pol.state_counter]
-                if pol.state_counter != len(pol.states_trigger)-1:
-                    pol.state_counter += 1
+            if percentage%pol.states_trigger[self.state_counter]==0:
+                print('State Changed to:',pol.states_list[self.state_counter])
+                pol.env.env.state_is = pol.states_list[self.state_counter]
+                if self.state_counter != len(pol.states_trigger)-1:
+                    self.state_counter += 1
             
 
     
