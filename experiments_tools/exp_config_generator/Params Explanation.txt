@@ -1,0 +1,41 @@
+[EXP]
+environment #environment that will be used
+
+[ALGO]
+maxmsteps [integer] : max number of (million) steps (default 1)
+stepsize [float]    : learning stepsize (default 0.01)
+samplesize [int]    : popsize/2 (default 20)
+noiseStdDev [float] : samples noise (default 0.02)
+wdecay [0/2]        : weight decay (default 0), 1 = L1, 2 = L2
+symseed [0/1]       : same environmental seed to evaluate symmetrical samples [default 1]
+saveeach [integer]  : save file every N minutes (default 60)
+
+
+[POLICY]
+nrobots = 1     # number of agents
+heterogeneous=0 # whether the policy of the agents is heterogeneous
+ntrials = 1     # evaluation trials
+nttrials = 1    # post-evaluation trials
+maxsteps = 1000 # max number of steps 
+nhiddens = 50   # number of hiddens
+nhiddens2 = 0   # number of hiddens of the second layer 
+nlayers = 1     # number of hidden layers 
+bias = 0        # whether we have biases
+out_type = 2    # output type (1=logistic,2=tanh,3=linear,4=binary)
+architecture =0 # Feed-forward, recurrent, or full-recurrent network
+afunction = 2   # activation function
+nbins = 1       # number of bins 1=no-beans
+winit = 0       # weight initialization: Xavier, normc, uniform
+action_noise = 0# whether we apply noise to actions
+action_noise_range = 0.01 # action noise range
+normalize = 0   # Do not normalize observations
+clip = 0        # clip observation
+displayneurons=0# Gym policies can display or the robot or the neurons activations
+wrange = 1.0    # weight range, used in uniform initialization only
+low = -1.0      # mimimum activation
+high = 1.0      # maximum activation
+frequency =1000 # frequency of change in maxteps by percentage of progress 
+maxsteps_change= 0 # quantity of change in maxsteps
+random_change = False  # if the change is random or not
+states_change = 1,remove_abonus,3,double_progress #percentage,state that will be set on the percentage 
+
