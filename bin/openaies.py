@@ -66,7 +66,7 @@ class Algo(EvoAlgo):
                     found = 1
 
                 if found == 0:
-                    print("\033[1mOption %s in section [ALGO] of %s file is unknown\033[0m" % (o, filename))
+                    print("\033[1mOption %s in section [ALGO] of %s file is unknown\033[0m" % (o, self.fileini))
                     print("available hyperparameters are: ")
                     print("maxmsteps [integer]       : max number of (million) steps (default 1)")
                     print("stepsize [float]          : learning stepsize (default 0.01)")
@@ -103,7 +103,13 @@ class Algo(EvoAlgo):
         self.normepisodes = 0                    # numer of episodes in which normalization data has been actually collected so far
         self.normalizationdatacollected = False  # whether we collected data for updating the normalization vector
         self.old = 0
+        
+
         self.state_counter = 0
+        self.modified = 0
+        self.change_count = 0
+        self.bestfit_n_gen = []
+
 
 
     def savedata(self):
@@ -124,8 +130,7 @@ class Algo(EvoAlgo):
 
         self.cgen += 1        
         percentage = int(self.steps / float(self.maxsteps) * 100)
-      
-        
+
         self.change_state(percentage)
         if self.policy.random_change:
             self.policy.maxsteps = np.random.randint(1,21)*self.policy.maxsteps_change 
@@ -138,6 +143,7 @@ class Algo(EvoAlgo):
                     self.policy.maxsteps += self.policy.maxsteps_change 
                     print('maxsteps:',self.policy.maxsteps)
         self.old =   percentage 
+
             
         # evaluate samples
         candidate = np.arange(self.nparams, dtype=np.float64)
@@ -157,6 +163,9 @@ class Algo(EvoAlgo):
         self.avgfit = np.average(fitness)                         # compute the average fitness                   
 
         self.bfit = fitness[(self.batchSize * 2) - 1]
+        if self.modified and self.adaptive:
+            self.bestfit_n_gen[self.change_count] = self.bfit
+            self.change_count += 1
         bidx = self.index[(self.batchSize * 2) - 1]  
         if ((bidx % 2) == 0):                                     # regenerate the genotype of the best samples
             bestid = int(bidx / 2)
@@ -294,11 +303,6 @@ class Algo(EvoAlgo):
         self.center += dCenter                                    # move the center in the direction of the momentum vectors
         self.avecenter = np.average(np.absolute(self.center))      
 
-    def state_change(self):
-        if self.state == States.Alive_bonus_0:
-            pass
-        elif self.state == States.Norm:
-            pass
     def run(self):
 
         self.setProcess()                           # initialize class variables
