@@ -12,7 +12,6 @@
 import numpy as np
 from numpy import zeros, ones, dot, sqrt
 import math
-from states import States
 import time
 from evoalgo import EvoAlgo
 from utils import ascendent_sort
@@ -67,7 +66,7 @@ class Algo(EvoAlgo):
                     found = 1
 
                 if found == 0:
-                    print("\033[1mOption %s in section [ALGO] of %s file is unknown\033[0m" % (o, filename))
+                    print("\033[1mOption %s in section [ALGO] of %s file is unknown\033[0m" % (o, self.fileini))
                     print("available hyperparameters are: ")
                     print("maxmsteps [integer]       : max number of (million) steps (default 1)")
                     print("stepsize [float]          : learning stepsize (default 0.01)")
@@ -104,8 +103,13 @@ class Algo(EvoAlgo):
         self.normepisodes = 0                    # numer of episodes in which normalization data has been actually collected so far
         self.normalizationdatacollected = False  # whether we collected data for updating the normalization vector
         self.old = 0
+        
+
+        self.state_counter = 0
+        self.modified = 0
         self.change_count = 0
         self.bestfit_n_gen = []
+
 
 
     def savedata(self):
@@ -160,8 +164,8 @@ class Algo(EvoAlgo):
 
         self.bfit = fitness[(self.batchSize * 2) - 1]
         if self.modified and self.adaptive:
-            self.bestfit_n_gen[change_count] = self.bfit
-            change_count += 1
+            self.bestfit_n_gen[self.change_count] = self.bfit
+            self.change_count += 1
         bidx = self.index[(self.batchSize * 2) - 1]  
         if ((bidx % 2) == 0):                                     # regenerate the genotype of the best samples
             bestid = int(bidx / 2)
@@ -196,11 +200,11 @@ class Algo(EvoAlgo):
         pol = self.policy
 
         if percentage!=self.old:
-            if percentage%pol.states_trigger[pol.state_counter]==0:
-                print('State Changed to:',pol.states_list[pol.state_counter])
-                pol.env.env.state_is = pol.states_list[pol.state_counter]
-                if pol.state_counter != len(pol.states_trigger)-1:
-                    pol.state_counter += 1
+            if percentage%pol.states_trigger[self.state_counter]==0:
+                print('State Changed to:',pol.states_list[self.state_counter])
+                pol.env.env.state_is = pol.states_list[self.state_counter]
+                if self.state_counter != len(pol.states_trigger)-1:
+                    self.state_counter += 1
             
 
     
@@ -299,11 +303,6 @@ class Algo(EvoAlgo):
         self.center += dCenter                                    # move the center in the direction of the momentum vectors
         self.avecenter = np.average(np.absolute(self.center))      
 
-    def state_change(self):
-        if self.state == States.Alive_bonus_0:
-            pass
-        elif self.state == States.Norm:
-            pass
     def run(self):
 
         self.setProcess()                           # initialize class variables
