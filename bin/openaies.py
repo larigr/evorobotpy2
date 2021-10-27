@@ -113,6 +113,7 @@ class Algo(EvoAlgo):
 
 
     def savedata(self):
+        print("usando openaies.py")
         self.save()             # save the best agent so far, the best postevaluated agent so far, and progress data across generations
         fname = self.filedir + "/S" + str(self.seed) + ".csv"
         fp = open(fname, "a")   # save summary
