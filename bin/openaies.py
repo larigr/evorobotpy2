@@ -122,6 +122,11 @@ class Algo(EvoAlgo):
             (self.cgen, self.steps / 1000000, self.bestfit, self.bestgfit, self.bfit, self.avgfit, self.avecenter,self.policy.maxsteps))
     
         fp.close()
+        fname1 = self.filedir + "/S" + str(self.seed) + ".fit"
+        fp1 = open(fname1, "w")
+        fp1.write('Seed %d (%.1f%%) gen %d msteps %d bestfit %.2f bestgfit %.2f bestsam %.2f avgfit %.2f paramsize %.2f \n' %
+             (self.seed, self.steps / float(self.maxsteps) * 100, self.cgen, self.steps / 1000000, self.bestfit, self.bestgfit, self.bfit, self.avgfit, self.avecenter))
+        fp1.close()
 
     def evaluate(self):
      

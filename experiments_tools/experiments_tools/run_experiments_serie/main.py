@@ -13,7 +13,7 @@ e_folder = '../exp_config_generator/experiment_maxsteps_type2'
 number_of_seeds = 10
 
 '''you can type the additional parameters that you want to use to run your experiments'''
-additional_params = '-w 3'
+additional_params = '-w 1'
 
 '''how many experiments do you want to run simultaneously?'''
 simultaneously = 5
