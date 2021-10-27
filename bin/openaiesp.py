@@ -113,6 +113,7 @@ class Algo(EvoAlgo):
         self.normepisodes = 0                    # numer of episodes in which normalization data has been actually collected so far
 
     def savedata(self):
+        print("usando openaiesp.py")
         # save best postevaluated so far
         fname = self.filedir + "/bestgS" + str(self.seed)
         np.save(fname, self.bestgsol)
