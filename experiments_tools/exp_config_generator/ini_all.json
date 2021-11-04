@@ -27,7 +27,7 @@
     }
 },
     {
-        "Walker2DBulletEnv-v5": {
+        "Walker2DBulletEnv-v0": {
             "[ALGO]": {
                 "maxmsteps": " 50",
                 "stepsize": " 0.01",
@@ -188,7 +188,7 @@
         }
     },
     {
-        "AntBulletEnv-v5": {
+        "AntBulletEnv-v0": {
             "[ALGO]": {
                 "maxmsteps": " 50",
                 "stepsize": " 0.01",

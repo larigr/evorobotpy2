@@ -7,19 +7,19 @@ import time
 '''setting variables'''
 
 ''' experiment folder (relative path) '''
-e_folder = '../exp_config_generator/experiment'
+e_folder = '../exp_config_generator/ExperimentRandom'
 
 '''how many seeds do you want to run for each experiment?'''
-number_of_seeds = 2
+number_of_seeds = 4
 
 '''you can type the additional parameters that you want to use to run your experiments'''
-additional_params = '-w 3'
+additional_params = ''
 
 '''how many experiments do you want to run simultaneously?'''
-simultaneously = 4
+simultaneously = 2
 
 '''seed initial number'''
-initial_seed_number = 1
+initial_seed_number = 4
 
 
 e_list = os.listdir(e_folder)
@@ -41,7 +41,7 @@ for i in e_list:
             if '.ini' in f:
                 if not '.txt' in f:
                     ini_name = f
-        seed_command = 'python3 ../../../../bin/es.py -f {}'.format(ini_name)
+        seed_command = 'python3.7 ../../../../bin/es.py -f {}'.format(ini_name)
         seed_command = seed_command + (' -s {} {}'.format(seed, additional_params))
         new_command = [find_folder,seed_command]
         print(new_command)
