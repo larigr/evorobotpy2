@@ -220,7 +220,7 @@ class BulletPolicy(Policy):
         Policy.__init__(self, env, filename, seed, test)     
         self.posvalfile =filename[:-4] + genofile[:-4]+".pos" 
         fp = open(self.posvalfile,"w")
-        fp.write("trial,fit,steps\n")
+        fp.write("trial,fit,steps,behaviour\n")
 
     
     def rollout(self, ntrials, render=False, seed=None):   # evaluate the policy for one or more episodes 
@@ -258,8 +258,10 @@ class BulletPolicy(Policy):
                 if done:
                     break
             if (self.test > 0):
+                desloc = input('Ele andou fico parado? 0-parado -1andou e parou -2- continuou:')
+                desloc = desloc.strip()
                 fp = open(self.posvalfile,"a")
-                fp.write("%d,%d,%d\n" % (trial, rew, t))
+                fp.write("%d,%d,%d,%s\n" % (trial, rew, t, desloc))
                 fp.close()
                 print("Trial %d Fit %.2f Steps %d " % (trial, rew, t))
             steps += t
