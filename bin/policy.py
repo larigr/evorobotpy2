@@ -218,9 +218,10 @@ class BulletPolicy(Policy):
         self.ninputs = env.observation_space.shape[0]      # only works for problems with continuous observation space
         self.noutputs = env.action_space.shape[0]          # only works for problems with continuous action space
         Policy.__init__(self, env, filename, seed, test)     
+        self.genofile = genofile
         self.posvalfile =filename[:-4] + genofile[:-4]+".pos" 
         fp = open(self.posvalfile,"w")
-        fp.write("trial,fit,steps,behaviour\n")
+        fp.write("trial,fit,steps,desloc\n")
 
     
     def rollout(self, ntrials, render=False, seed=None):   # evaluate the policy for one or more episodes 
@@ -234,20 +235,26 @@ class BulletPolicy(Policy):
             self.env.seed(seed)          # set the seed of the environment that impacts on the initialization of the robot/environment
             self.nn.seed(seed)           # set the seed of evonet that impacts on the noise eventually added to the activation of the neurons
         for trial in range(ntrials):
-            self.ob = self.env.reset()   # reset the environment
-            self.nn.resetNet()           # reset the activation of the neurons (necessary for recurrent policies)
+         
+            self.ob = self.env.reset()
+    
+            # reset the environment
+                
+            #self.ob = self.rVitor
+        
+            self.nn.resetNet()
+                  # reset the activation of the neurons (necessary for recurrent policies)
             rew = 0
             t = 0
-            
             while t < self.maxsteps:
-                self.nn.copyInput(self.ob)                    # copy the pointer to the observation vector to evonet
+                
+                self.nn.copyInput(self.ob) # copy the pointer to the observation vector to evonet
                 self.nn.updateNet()                           # update the activation of the policy
                 self.ob, r, done, _ = self.env.step(self.ac)  # perform a simulation step
                 rew += r
                 t += 1
     
-        
-               
+                
                 if (self.test > 0):
                     if (self.test == 1):
                         self.env.render(mode="human")
@@ -258,14 +265,16 @@ class BulletPolicy(Policy):
                 if done:
                     break
             if (self.test > 0):
-                desloc = input('Ele andou fico parado? 0-parado -1andou e parou -2- continuou:')
-                desloc = desloc.strip()
                 fp = open(self.posvalfile,"a")
-                fp.write("%d,%d,%d,%s\n" % (trial, rew, t, desloc))
+                fp.write("%d,%d,%d,%.2f\n" % (trial, rew, t,1000 - self.env.distancia))
                 fp.close()
-                print("Trial %d Fit %.2f Steps %d " % (trial, rew, t))
+
+                print("Trial %d Fit %.2f Steps %d Desloc %.2f : %s" % (trial, rew, t,1000-self.env.distancia,self.genofile))
             steps += t
+       
+            
             rews += rew
+
         rews /= ntrials                # Normalize reward by the number of trials
         if (self.test > 0 and ntrials > 1):
             print("Average Fit %.2f Steps %.2f " % (rews, steps/float(ntrials)))
