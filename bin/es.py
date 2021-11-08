@@ -130,10 +130,14 @@ def main(argv):
 
     test = 0
     if args.postevaluate:
+        print("-----------------")
+        print(args.genofile)
+        print("-"*20)
         if args.displayneurons:
             test = 2
         else:
             test = 1
+    
     
     if args.workers > 1:            # create multiple threads
         from fork import FORK
@@ -158,7 +162,10 @@ def main(argv):
         import pybullet_envs
         env = gym.make(environment)
         from policy import BulletPolicy
-        policy = BulletPolicy(env, args.fileini, args.seed, test)
+        if args.genofile:
+            policy = BulletPolicy(env, args.fileini, args.seed, test,args.genofile)
+        else:
+            policy = BulletPolicy(env, args.fileini, args.seed, test)
     elif "Custom" in environment:              # Custom environment
         customEnv = __import__(environment)
         env = customEnv.customEnv()        

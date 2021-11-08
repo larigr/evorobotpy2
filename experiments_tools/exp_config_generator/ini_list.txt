@@ -7,3 +7,6 @@
 /home/larissagr/Documentos/evorobotpy2/experiments_tools/exp_config_generator/experiment/HopperBulletEnv-v0-0,HopperBulletEnv-v0-0.ini,
 /home/larissagr/Documentos/evorobotpy2/experiments_tools/exp_config_generator/experiment/HopperBulletEnv-v0-1,HopperBulletEnv-v0-1.ini,
 /home/larissagr/Documentos/evorobotpy2/experiments_tools/exp_config_generator/experiment/HopperBulletEnv-v0-2,HopperBulletEnv-v0-2.ini,
+/home/vitorh/evorobotpy2/experiments_tools/exp_config_generator/ExperimentRandom/Walker2DBulletEnv-v0-0,Walker2DBulletEnv-v0-0.ini,
+/home/vitorh/evorobotpy2/experiments_tools/exp_config_generator/ExperimentRandom/Walker2DBulletEnv-v0-0,Walker2DBulletEnv-v0-0.ini,
+/home/vitorh/evorobotpy2/experiments_tools/exp_config_generator/ExperimentRandom/AntBulletEnv-v0-0,AntBulletEnv-v0-0.ini,

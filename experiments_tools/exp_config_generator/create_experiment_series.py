@@ -2,8 +2,9 @@ from Combiner import Combiner
 from Ini_generator import Ini_Generator
 
 
-dicionario = {'enviroment': ['HopperBulletEnv-v0'],
-              'maxmsteps': [27, 32, 23]}
+dicionario = {'enviroment': ['AntBulletEnv-v0'],
+              'random_change':[True],
+              'maxsteps_change':[50]}
 
 
 def generate_all_inis(base,foldername='experiment'):
@@ -19,4 +20,4 @@ def generate_all_inis(base,foldername='experiment'):
     gerador.create_all_exp()
 
 
-generate_all_inis(dicionario,foldername)
+generate_all_inis(dicionario,"ExperimentRandom")

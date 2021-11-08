@@ -51,6 +51,8 @@ class Policy(object):
         self.maxsteps_change= 0 # quantity of change in maxsteps
         self.random_change = False  # if the change is random or not
         self.states_change = 100,"nothing"
+        self.states_trigger = [100]
+        self.states_list = ["nothing"]
         # Read configuration file
         self.readConfig()
         # Display info
@@ -212,10 +214,15 @@ class Policy(object):
 # create a new observation vector each step, consequently we need to pass the pointer to evonet each step 
 # Use renderWorld to show the activation of neurons
 class BulletPolicy(Policy):
-    def __init__(self, env, filename, seed, test):
+    def __init__(self, env, filename, seed, test,genofile=""):
         self.ninputs = env.observation_space.shape[0]      # only works for problems with continuous observation space
         self.noutputs = env.action_space.shape[0]          # only works for problems with continuous action space
-        Policy.__init__(self, env, filename, seed, test)                            
+        Policy.__init__(self, env, filename, seed, test)     
+        self.genofile = genofile
+        self.posvalfile =filename[:-4] + genofile[:-4]+".pos" 
+        fp = open(self.posvalfile,"w")
+        fp.write("trial,fit,steps,desloc\n")
+
     
     def rollout(self, ntrials, render=False, seed=None):   # evaluate the policy for one or more episodes 
         rews = 0.0                      # summed reward
@@ -228,29 +235,46 @@ class BulletPolicy(Policy):
             self.env.seed(seed)          # set the seed of the environment that impacts on the initialization of the robot/environment
             self.nn.seed(seed)           # set the seed of evonet that impacts on the noise eventually added to the activation of the neurons
         for trial in range(ntrials):
-            self.ob = self.env.reset()   # reset the environment
-            self.nn.resetNet()           # reset the activation of the neurons (necessary for recurrent policies)
+         
+            self.ob = self.env.reset()
+    
+            # reset the environment
+                
+            #self.ob = self.rVitor
+        
+            self.nn.resetNet()
+                  # reset the activation of the neurons (necessary for recurrent policies)
             rew = 0
             t = 0
             while t < self.maxsteps:
-                self.nn.copyInput(self.ob)                    # copy the pointer to the observation vector to evonet
+                
+                self.nn.copyInput(self.ob) # copy the pointer to the observation vector to evonet
                 self.nn.updateNet()                           # update the activation of the policy
                 self.ob, r, done, _ = self.env.step(self.ac)  # perform a simulation step
                 rew += r
                 t += 1
+    
+                
                 if (self.test > 0):
                     if (self.test == 1):
                         self.env.render(mode="human")
-                        time.sleep(0.05)
+                        #time.sleep(0.05)
                     if (self.test == 2):
                         info = 'Trial %d Step %d Fit %.2f %.2f' % (trial, t, r, rew)
                         renderWorld.update(self.objs, info, self.ob, self.ac, self.nact)
                 if done:
                     break
             if (self.test > 0):
-                print("Trial %d Fit %.2f Steps %d " % (trial, rew, t))
+                fp = open(self.posvalfile,"a")
+                fp.write("%d,%d,%d,%.2f\n" % (trial, rew, t,1000 - self.env.distancia))
+                fp.close()
+
+                print("Trial %d Fit %.2f Steps %d Desloc %.2f : %s" % (trial, rew, t,1000-self.env.distancia,self.genofile))
             steps += t
+       
+            
             rews += rew
+
         rews /= ntrials                # Normalize reward by the number of trials
         if (self.test > 0 and ntrials > 1):
             print("Average Fit %.2f Steps %.2f " % (rews, steps/float(ntrials)))
