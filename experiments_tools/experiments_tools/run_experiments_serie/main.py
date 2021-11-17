@@ -7,7 +7,7 @@ import time
 '''setting variables'''
 
 ''' experiment folder (relative path) '''
-e_folder = '../exp_config_generator/experiment_maxsteps_type4'
+e_folder = '../exp_config_generator/experiment_maxsteps_type5'
 
 '''how many seeds do you want to run for each experiment?'''
 number_of_seeds = 10
@@ -16,7 +16,7 @@ number_of_seeds = 10
 additional_params = '-w 1'
 
 '''how many experiments do you want to run simultaneously?'''
-simultaneously = 10
+simultaneously = 5
 
 '''seed initial number'''
 initial_seed_number = 1
