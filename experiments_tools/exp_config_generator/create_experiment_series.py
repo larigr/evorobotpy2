@@ -4,7 +4,7 @@ from Ini_generator import Ini_Generator
 
 dicionario = {'enviroment': ['AntBulletEnv-v0'],
               'random_change':[True],
-              'maxsteps_change':[50]}
+              'maxsteps_change':[50,2,4,5,6,1],'cu':[2,4,5,5,5]}
 
 
 def generate_all_inis(base,foldername='experiment'):
@@ -20,4 +20,4 @@ def generate_all_inis(base,foldername='experiment'):
     gerador.create_all_exp()
 
 
-generate_all_inis(dicionario,"ExperimentRandom")
+generate_all_inis(dicionario,"Mostraprogean")
