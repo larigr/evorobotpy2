@@ -2,8 +2,10 @@ from Combiner import Combiner
 from Ini_generator import Ini_Generator
 
 
-dicionario = {'enviroment': ['AntBulletEnv-v0', 'HopperBulletEnv-v0', 'Walker2DBulletEnv-v0'],
-              'maxsteps': [100], 'maxmsteps':[50]}
+dicionario = {'enviroment': ['Walker2DBulletEnv-v0'],
+              'maxsteps': [200],'frequency':[10,20], 'random_change':['false'], 
+              'states_change':['1, ab, 3, cd'],
+               'maxmsteps':[50], 'maxsteps_change':[100,200]}
 
 
 def generate_all_inis(base):
@@ -15,7 +17,7 @@ def generate_all_inis(base):
     print(d.all_combinations)
     d.array_to_dict(dic_keys)
 
-    gerador = Ini_Generator(d.all_combinations, 'experiment_maxsteps_type6')
+    gerador = Ini_Generator(d.all_combinations, 'experiment_maxsteps_type7')
     gerador.create_all_exp()
 
 
