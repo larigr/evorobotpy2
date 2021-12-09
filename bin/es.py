@@ -128,7 +128,7 @@ def main(argv):
             print("%s" % a)
         sys.exit(-1)
 
-    test = 1
+    test = 0
     if args.postevaluate:
         print("-----------------")
         print(args.genofile)
