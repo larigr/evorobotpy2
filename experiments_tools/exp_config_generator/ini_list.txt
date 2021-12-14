@@ -16,3 +16,4 @@
 /home/vitorh/evorobotpy2/experiments_tools/exp_config_generator/Mostraprogean/AntBulletEnv-v0-3,AntBulletEnv-v0-3.ini,
 /home/vitorh/evorobotpy2/experiments_tools/exp_config_generator/Mostraprogean/AntBulletEnv-v0-4,AntBulletEnv-v0-4.ini,
 /home/vitorh/evorobotpy2/experiments_tools/exp_config_generator/Mostraprogean/AntBulletEnv-v0-5,AntBulletEnv-v0-5.ini,
+/home/vitorh/evorobotpy2/experiments_tools/exp_config_generator/hopperfit/HopperBulletEnv-v0-0,HopperBulletEnv-v0-0.ini,

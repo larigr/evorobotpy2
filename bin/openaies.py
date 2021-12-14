@@ -208,7 +208,7 @@ class Algo(EvoAlgo):
         if percentage!=self.old:
             if percentage%pol.states_trigger[self.state_counter]==0:
                 print('State Changed to:',pol.states_list[self.state_counter])
-                pol.env.env.state_is = pol.states_list[self.state_counter]
+                pol.env.env.state_is = pol.states_list[self.state_counter].strip()
                 if self.state_counter != len(pol.states_trigger)-1:
                     self.state_counter += 1
             

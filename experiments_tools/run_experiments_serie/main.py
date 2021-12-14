@@ -7,10 +7,10 @@ import time
 '''setting variables'''
 
 ''' experiment folder (relative path) '''
-e_folder = '../exp_config_generator/ExperimentRandom'
+e_folder = '../exp_config_generator/hopperfit'
 
 '''how many seeds do you want to run for each experiment?'''
-number_of_seeds = 4
+number_of_seeds = 1
 
 '''you can type the additional parameters that you want to use to run your experiments'''
 additional_params = ''
@@ -19,7 +19,7 @@ additional_params = ''
 simultaneously = 2
 
 '''seed initial number'''
-initial_seed_number = 4
+initial_seed_number = 12
 
 
 e_list = os.listdir(e_folder)
