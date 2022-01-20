@@ -44,3 +44,7 @@
 /home/larissagr/Documentos/robotica_adaptativa/Outros/evorobotpy2/experiments_tools/experiments_tools/exp_config_generator/experiment_maxsteps_type7/Walker2DBulletEnv-v0-1,Walker2DBulletEnv-v0-1.ini,
 /home/larissagr/Documentos/robotica_adaptativa/Outros/evorobotpy2/experiments_tools/experiments_tools/exp_config_generator/experiment_maxsteps_type7/Walker2DBulletEnv-v0-2,Walker2DBulletEnv-v0-2.ini,
 /home/larissagr/Documentos/robotica_adaptativa/Outros/evorobotpy2/experiments_tools/experiments_tools/exp_config_generator/experiment_maxsteps_type7/Walker2DBulletEnv-v0-3,Walker2DBulletEnv-v0-3.ini,
+/home/larissagr/Documentos/robotica_adaptativa/Outros/evorobotpy2/experiments_tools/experiments_tools/exp_config_generator/experiment_maxsteps_type9/Walker2DBulletEnv-v0-0,Walker2DBulletEnv-v0-0.ini,
+/home/larissagr/Documentos/robotica_adaptativa/Outros/evorobotpy2/experiments_tools/experiments_tools/exp_config_generator/experiment_maxsteps_type9/Walker2DBulletEnv-v0-0,Walker2DBulletEnv-v0-0.ini,
+/home/larissagr/Documentos/robotica_adaptativa/Outros/evorobotpy2/experiments_tools/experiments_tools/exp_config_generator/experiment_maxsteps_type9/HopperBulletEnv-v0-0,HopperBulletEnv-v0-0.ini,
+/home/larissagr/Documentos/robotica_adaptativa/Outros/evorobotpy2/experiments_tools/experiments_tools/exp_config_generator/experiment_maxsteps_type9/AntBulletEnv-v0-0,AntBulletEnv-v0-0.ini,
