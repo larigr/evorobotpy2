@@ -7,7 +7,7 @@ import time
 '''setting variables'''
 
 ''' experiment folder (relative path) '''
-e_folder = '../exp_config_generator/experiment_maxsteps_type9'
+e_folder = '../exp_config_generator/experiment_maxsteps_type10'
 
 '''how many seeds do you want to run for each experiment?'''
 number_of_seeds = 10
