@@ -7,19 +7,19 @@ import time
 '''setting variables'''
 
 ''' experiment folder (relative path) '''
-e_folder = '../exp_config_generator/hopperfit'
+e_folder = '../exp_config_generator/experiment_maxsteps_type10'
 
 '''how many seeds do you want to run for each experiment?'''
-number_of_seeds = 1
+number_of_seeds = 10
 
 '''you can type the additional parameters that you want to use to run your experiments'''
-additional_params = ''
+additional_params = '-w 1'
 
 '''how many experiments do you want to run simultaneously?'''
-simultaneously = 2
+simultaneously = 5
 
 '''seed initial number'''
-initial_seed_number = 12
+initial_seed_number = 1
 
 
 e_list = os.listdir(e_folder)
@@ -41,7 +41,7 @@ for i in e_list:
             if '.ini' in f:
                 if not '.txt' in f:
                     ini_name = f
-        seed_command = 'python3.7 ../../../../bin/es.py -f {}'.format(ini_name)
+        seed_command = 'python3 ../../../../../bin/es.py -f {}'.format(ini_name)
         seed_command = seed_command + (' -s {} {}'.format(seed, additional_params))
         new_command = [find_folder,seed_command]
         print(new_command)

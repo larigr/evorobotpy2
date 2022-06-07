@@ -1,4 +1,0 @@
-python3.7 ../../../../bin/es.py -f AntBulletEnv-v0-0.ini -s 4 
-python3.7 ../../../../bin/es.py -f AntBulletEnv-v0-0.ini -s 5 
-python3.7 ../../../../bin/es.py -f AntBulletEnv-v0-0.ini -s 6 
-python3.7 ../../../../bin/es.py -f AntBulletEnv-v0-0.ini -s 7 

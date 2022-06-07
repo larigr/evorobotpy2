@@ -1,2 +1,0 @@
-AntBulletEnv-v0-0.ini
-{'enviroment': 'AntBulletEnv-v0', 'maxsteps': 1000, 'frequency': 10, 'random_change': 'true', 'states_change': '1, ab, 3, cd', 'maxmsteps': 50, 'maxsteps_change': 0}

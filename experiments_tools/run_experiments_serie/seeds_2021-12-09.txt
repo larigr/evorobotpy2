@@ -1,5 +1,0 @@
-python3.7 ../../../../bin/es.py -f HopperBulletEnv-v0-0.ini -s 8 
-python3.7 ../../../../bin/es.py -f HopperBulletEnv-v0-0.ini -s 9 
-python3.7 ../../../../bin/es.py -f HopperBulletEnv-v0-0.ini -s 10 
-python3.7 ../../../../bin/es.py -f HopperBulletEnv-v0-0.ini -s 11 
-python3.7 ../../../../bin/es.py -f HopperBulletEnv-v0-0.ini -s 12 

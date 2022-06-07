@@ -84,7 +84,7 @@
     {
         "HopperBulletEnv-v0": {
             "[ALGO]": {
-                "maxmsteps": " 50",
+                "maxmsteps": " 20",
                 "stepsize": " 0.01",
                 "noiseStdDev": " 0.02",
                 "sampleSize": " 20",
@@ -94,7 +94,7 @@
             "[POLICY]": {
                 "episodes": " 1",
                 "pepisodes": " 3",
-                "maxsteps": " 1000",
+                "maxsteps": " 500",
                 "nhiddens": " 50",
                 "nlayers": " 1",
                 "bias": " 1",
