@@ -118,8 +118,8 @@ class Algo(EvoAlgo):
         fname = self.filedir + "/S" + str(self.seed) + ".csv"
         fp = open(fname, "a")   # save summary
 
-        fp.write('%d,%d,%.2f,%.2f,%.2f,%.2f,%.2f,%d\n' %
-            (self.cgen, self.steps / 1000000, self.bestfit, self.bestgfit, self.bfit, self.avgfit, self.avecenter,self.policy.maxsteps))
+        fp.write('%d,%d,%.2f,%.2f,%.2f,%.2f,%.2f,%.2f,%d\n' %
+            (self.cgen, self.steps / 1000000, self.bestfit,self.deslocamento_tot, self.bestgfit, self.bfit, self.avgfit, self.avecenter,self.policy.maxsteps))
     
         fp.close()
         fname1 = self.filedir + "/S" + str(self.seed) + ".fit"
@@ -161,7 +161,8 @@ class Algo(EvoAlgo):
                     candidate = self.center - self.samples[b,:] * self.noiseStdDev
                 self.policy.set_trainable_flat(candidate)
                 self.policy.nn.normphase(0) # normalization data is collected during the post-evaluation of the best sample of he previous generation
-                eval_rews, eval_length = self.policy.rollout(self.policy.ntrials, seed=(self.seed + (self.cgen * self.batchSize) + b))
+                eval_rews, eval_length, desloc = self.policy.rollout(self.policy.ntrials, seed=(self.seed + (self.cgen * self.batchSize) + b))
+                print(f'rew ={eval_rews},steps={eval_length},desloc={desloc}')
                 self.samplefitness[b*2+bb] = eval_rews
                 self.steps += eval_length
 
@@ -185,6 +186,7 @@ class Algo(EvoAlgo):
         # postevaluate best sample of the last generation
         # in openaiesp.py this is done the next generation, move this section before the section "evaluate samples" to produce identical results
         gfit = 0
+        deslocamento_tot = 0
         if self.bestsol is not None:
             self.policy.set_trainable_flat(self.bestsol)
             self.tnormepisodes += self.inormepisodes
@@ -195,11 +197,24 @@ class Algo(EvoAlgo):
                     self.normalizationdatacollected = True
                 else:
                     self.policy.nn.normphase(0)
-                eval_rews, eval_length = self.policy.rollout(1, seed=(self.seed + 100000 + t))
-                gfit += eval_rews               
+                eval_rews, eval_length,desloc = self.policy.rollout(1, seed=(self.seed + 100000 + t))
+                gfit += eval_rews 
+                deslocamento_tot += desloc             
                 self.steps += eval_length
-            gfit /= self.policy.nttrials    
-            self.updateBestg(gfit, self.bestsol)
+            gfit /= self.policy.nttrials
+            deslocamento_tot /= self.policy.nttrials
+
+            self.updateBestg(gfit,deslocamento_tot, self.bestsol)
+            self.save_gen_data()
+
+    def save_gen_data(self):
+        fname = self.filedir + "/gen_data" + str(self.seed) + ".csv"
+        fp = open(fname, "a")   # save summary
+
+        fp.write('%d,%d,%.2f\n' %
+            (self.cgen,self.bestfit,self.deslocamento_tot))
+    
+        fp.close()
 
     def change_state(self,percentage):
         
@@ -335,8 +350,8 @@ class Algo(EvoAlgo):
                 self.policy.nn.updateNormalizationVectors()  # update the normalization vectors with the new data collected
                 self.normalizationdatacollected = False
 
-            print('Seed %d (%.1f%%) gen %d msteps %d bestfit %.2f bestgfit %.2f bestsam %.2f avg %.2f weightsize %.2f' %
-                      (self.seed, self.steps / float(self.maxsteps) * 100, self.cgen, self.steps / 1000000, self.bestfit, self.bestgfit, self.bfit, self.avgfit, self.avecenter))
+            print('Seed %d (%.1f%%) gen %d msteps %d bestfit %.2f deslocamento: %d bestgfit %.2f bestsam %.2f avg %.2f weightsize %.2f' %
+                      (self.seed, self.steps / float(self.maxsteps) * 100, self.cgen, self.steps / 1000000, self.bestfit, self.deslocamento_tot, self.bestgfit, self.bfit, self.avgfit, self.avecenter))
 
         self.savedata()                           # save data at the end of evolution
 

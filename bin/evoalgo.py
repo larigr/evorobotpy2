@@ -74,9 +74,10 @@ class EvoAlgo(object):
             else:
                 self.bestsol = np.append(ind,self.policy.normvector)
 
-    def updateBestg(self, fit, ind): # checks whether this is the best postevaluated agent so far and eventually store it
+    def updateBestg(self, fit,deslocamento_tot, ind): # checks whether this is the best postevaluated agent so far and eventually store it
         if fit > self.bestgfit:
             self.bestgfit = fit
+            self.deslocamento_tot = deslocamento_tot
             if (self.policy.normalize == 0):
                 self.bestgsol = np.copy(ind)
             else:

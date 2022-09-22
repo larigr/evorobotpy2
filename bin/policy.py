@@ -20,6 +20,8 @@ import sys
 
 class Policy(object):
     def __init__(self, env, fileini, seed, test):
+        self.ctrl_time = True
+        self.ctrl_try = 5
         # Copy environment
         self.env = env
         self.seed = seed
@@ -219,7 +221,14 @@ class BulletPolicy(Policy):
         self.noutputs = env.action_space.shape[0]          # only works for problems with continuous action space
         Policy.__init__(self, env, filename, seed, test)     
         self.genofile = genofile
-        self.posvalfile =filename[:-4] + genofile[:-4]+".pos" 
+        #self.posvalfile =filename[:-4] + genofile[:-4]+".pos" 
+        #self.datafile =filename[:-4] + genofile[:-4]+".data"
+        self.datafile = "datafile"
+        self.posvalfile = 'posvalfile'
+        #self.posvalfile = filename[:filename.index('/')] + genofile[genofile.index('/')+1:-4] +'.pos'
+        #self.datafile = filename[:filename.index('/')] + genofile[genofile.index('/')+1:-4] + '.data'
+        fp = open(self.datafile,'w')
+        fp.write("velocidade,joints\n")
         fp = open(self.posvalfile,"w")
         fp.write("trial,fit,steps,desloc\n")
 
@@ -256,6 +265,14 @@ class BulletPolicy(Policy):
     
                 
                 if (self.test > 0):
+                    fp = open(self.datafile,"a")
+                    fp.write(f"{self.env.velocity:.3f},{','.join(self.env.angulos)}\n")
+                    fp.close()
+                    print(self.datafile)
+                    if self.ctrl_time:
+                        time.sleep(0.01)
+                    #print(self.env.velocity)
+                    #print(self.env.angulos)
                     if (self.test == 1):
                         self.env.render(mode="human")
                         #time.sleep(0.05)
@@ -265,6 +282,12 @@ class BulletPolicy(Policy):
                 if done:
                     break
             if (self.test > 0):
+                fp = open(self.datafile,"a")
+                fp.write(f"-99,new_run\n")
+                fp.close()
+                if self.ctrl_try == 0:
+                    self.ctrl_time = False
+                self.ctrl_try-=1
                 fp = open(self.posvalfile,"a")
                 fp.write("%d,%d,%d,%.2f\n" % (trial, rew, t,1000 - self.env.distancia))
                 fp.close()
@@ -278,7 +301,8 @@ class BulletPolicy(Policy):
         rews /= ntrials                # Normalize reward by the number of trials
         if (self.test > 0 and ntrials > 1):
             print("Average Fit %.2f Steps %.2f " % (rews, steps/float(ntrials)))
-        return rews, steps
+ 
+        return rews, steps,self.env.distancia
     
 # Gym policies use float64 observation and action vectors (evonet use float32)
 # create a new observation vector each step, consequently we need to pass the pointer to evonet each step 
@@ -375,6 +399,7 @@ class GymPolicyDiscr(Policy):
         rews /= ntrials          # Normalize reward by the number of trials
         if (self.test > 0 and ntrials > 1):
             print("Average Fit %.2f Steps %d " % (rews, steps/float(ntrials)))
+        desloc = 4
         return rews, steps
 
 
