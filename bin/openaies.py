@@ -250,9 +250,9 @@ class Algo(EvoAlgo):
                 iev = 0
                 for i in range(popsize):
                     iev += abs(utilities[i] - utilities2[i])
-
-                print(f" =*=*=* GEN {self.cgen} - IEV = {iev / popsize} =*=*=*")
-                self.ievReg.append(iev / popsize)
+                d = math.floor((2 * (popsize**2)/4))
+                print(f" =*=*=* GEN {self.cgen} - IEV = {iev / d} =*=*=*")
+                self.ievReg.append(iev / d)
 
 
     def optimize(self):

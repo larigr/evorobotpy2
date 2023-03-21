@@ -12,7 +12,7 @@ kiwisolver==1.4.4
 make==0.1.6.post2
 MarkupSafe==2.1.1
 matplotlib==3.6.1
-numpy==1.18.0
+numpy==1.23.3
 packaging==21.3
 Pillow==9.2.0
 pybullet==3.2.5
